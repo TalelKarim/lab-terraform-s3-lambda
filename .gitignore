@@ -2,3 +2,6 @@
 .terraform.lock.hcl
 terraform.tfstate.backup
 terraform.tfstate
+assets/
+modules/lambda-functions/src/python/
+*.zip 
