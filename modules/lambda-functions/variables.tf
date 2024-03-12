@@ -22,3 +22,9 @@ variable "dynamodb_table_name" {
   type        = string
   description = "The name of the dynamodb table"
 }
+
+variable "lambda_layers" {
+  type        = list(string)
+  description = "The layers managed by AWS to be uploaded for the lambda function"
+  default     = ["arn:aws:lambda:eu-west-3:336392948345:layer:AWSSDKPandas-Python38:18"]
+}
