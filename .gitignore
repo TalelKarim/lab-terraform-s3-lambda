@@ -3,5 +3,5 @@
 terraform.tfstate.backup
 terraform.tfstate
 assets/
-modules/lambda-functions/src/python/
+modules/lambda-functions/src/lambda_layer/
 *.zip 

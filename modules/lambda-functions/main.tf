@@ -10,14 +10,16 @@ data "archive_file" "zip_main" {
 
 data "archive_file" "zip_layer_one" {
   type        = "zip"
-  source_dir  = "${local.lambda_function_tools_path}/python"
+  source_dir  = "${local.lambda_function_tools_path}/lambda_layer/python"
   output_path = "${local.lambda_function_tools_path}/python.zip"
 }
 
 resource "aws_lambda_layer_version" "pandas_layer" {
   filename            = "${local.lambda_function_tools_path}/python.zip" # Update with the correct path
   layer_name          = "my-python-pandas-layer"
-  compatible_runtimes = ["python3.10"] # Adjust as needed
+  compatible_runtimes = [var.lambda_runtime]
+  # source_code_hash    = filebase64("${local.lambda_function_tools_path}/python.zip")
+  depends_on          = [data.archive_file.zip_layer_one]
 }
 
 
@@ -35,7 +37,6 @@ resource "aws_lambda_function" "csv_processor" {
       BUCKET_NAME         = var.bucket_name
       FILE_KEY            = "input_csv_file"
       DYNAMODB_TABLE_NAME = var.dynamodb_table_name
-      # Add more environment variables as needed
     }
   }
 }
