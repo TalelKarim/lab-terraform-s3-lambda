@@ -1,4 +1,4 @@
-variable "labmda_function_name" {
+variable "lambda_function_name" {
   type        = string
   description = "The name of the lambda function that will be created"
 }

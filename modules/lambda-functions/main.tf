@@ -47,7 +47,7 @@ data "archive_file" "zip_main" {
 
 
 resource "aws_lambda_function" "csv_processor" {
-  function_name    = var.labmda_function_name
+  function_name    = var.lambda_function_name
   runtime          = var.lambda_runtime
   handler          = "main.lambda_handler"
   role             = aws_iam_role.lambda_role.arn
@@ -58,8 +58,6 @@ resource "aws_lambda_function" "csv_processor" {
   # Define environment variables
   environment {
     variables = {
-      BUCKET_NAME         = var.bucket_name
-      FILE_KEY            = "input_csv_file"
       DYNAMODB_TABLE_NAME = var.dynamodb_table_name
     }
   }
@@ -132,13 +130,13 @@ resource "aws_iam_role_policy" "function_logging_policy" {
   })
 }
 
-# # Trigger the Lambda function when a new CSV file is uploaded to the source bucket
-# resource "aws_s3_bucket_notification" "lambda_trigger" {
-#   bucket = var.bucket_name
+#Trigger the Lambda function when a new CSV file is uploaded to the source bucket
+resource "aws_s3_bucket_notification" "lambda_trigger" {
+  bucket = var.bucket_name
 
-#   lambda_function {
-#     lambda_function_arn = aws_lambda_function.csv_processor.arn
-#     events              = ["s3:ObjectCreated:*"]
-#     filter_suffix       = ".csv"
-#   }
-# }
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.csv_processor.arn
+    events              = ["s3:ObjectCreated:*"]
+    filter_suffix       = ".csv"
+  }
+}

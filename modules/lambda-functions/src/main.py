@@ -3,15 +3,16 @@ import pandas as pd
 import io
 import os
 import sys 
-# Initialize S3 and DynamoDB clients
-s3 = boto3.client('s3')
-dynamodb = boto3.client('dynamodb')
-table =  os.environ['DYNAMODB_TABLE_NAME']
-def lambda_handler(event, context):
 
+
+def lambda_handler(event, context):
+    # Initialize S3 and DynamoDB clients
+    s3 = boto3.client('s3')
+    dynamodb = boto3.client('dynamodb')
+    table =  os.environ['DYNAMODB_TABLE_NAME']  
     # Specify your S3 bucket and file details
-    bucket_name = os.environ['BUCKET_NAME']
-    file_key = os.environ['FILE_KEY']
+    bucket_name = event["Records"][0]["s3"]["bucket"]["name"]
+    file_key = event["Records"][0]["s3"]["object"]["key"]
 
     # Read CSV data from S3
     csv_obj = s3.get_object(Bucket=bucket_name, Key=file_key)
@@ -20,7 +21,6 @@ def lambda_handler(event, context):
 
     # Store data in DynamoDB
     for friend in friends:
-        print(friend)
         friend_data = friend.split(",")
         try: 
             item = {

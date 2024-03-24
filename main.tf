@@ -3,14 +3,16 @@ provider "aws" {
 
 
 module "s3_bucket" {
-  source          = "./modules/s3-bucket"
-  bucket_name     = "input-bucket-tk"
-  input_file_path = "./assets/file_to_upload.csv"
+  source              = "./modules/s3-bucket"
+  bucket_name         = "input-bucket-tk"
+  input_file_path     = "./assets/file_to_upload.csv"
+  csv_filename        = "input_file.csv"
+  target_function_arn = module.lambda_function.function_arn
 }
 
 module "lambda_function" {
   source               = "./modules/lambda-functions"
-  labmda_function_name = var.labmda_function_name
+  lambda_function_name = var.lambda_function_name
   lambda_runtime       = "python3.8"
   bucket_name          = module.s3_bucket.s3_bucket_name
   dynamodb_arn         = module.dynamodb.dynamodb_table_arn
@@ -25,5 +27,11 @@ module "dynamodb" {
 
 module "cloudwatch" {
   source        = "./modules/cloudwatch"
-  function_name = var.labmda_function_name
+  function_name = var.lambda_function_name
 }
+
+# module "EventBridge" {
+#   source = "./modules/event-bridge"
+#   target_lambda_function_arn = module.lambda_function.function_arn
+#   source_bucket_name = module.s3_bucket.s3_bucket_name
+# }
