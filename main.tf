@@ -2,11 +2,10 @@ provider "aws" {
 }
 
 
+
 module "s3_bucket" {
   source              = "./modules/s3-bucket"
   bucket_name         = "input-bucket-tk"
-  input_file_path     = "./assets/file_to_upload.csv"
-  csv_filename        = "input_file.csv"
   target_function_arn = module.lambda_function.function_arn
 }
 
@@ -35,3 +34,12 @@ module "cloudwatch" {
 #   target_lambda_function_arn = module.lambda_function.function_arn
 #   source_bucket_name = module.s3_bucket.s3_bucket_name
 # }
+
+module "csv_uploader" {
+  source          = "./modules/uploader"
+  bucket_id       = module.s3_bucket.s3_bucket_name
+  input_file_path = "./assets/file_to_upload.csv"
+  csv_filename    = "input_file.csv"
+  depends_on      = [module.lambda_function]
+
+}

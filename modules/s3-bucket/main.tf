@@ -37,19 +37,6 @@ resource "aws_s3_bucket_versioning" "versioning" {
   }
 }
 
-#upload the .csv file to the bucket
-
-resource "aws_s3_bucket_object" "upload_csv" {
-  bucket = aws_s3_bucket.bucket.id # Replace with your bucket name
-  key    = var.csv_filename        # Specify the desired object key (file name)
-
-  # Path to your local CSV file
-  source = var.input_file_path
-
-  # Calculate the MD5 hash of the file for ETag
-  etag = filemd5(var.input_file_path)
-}
-
 #Add permission to allow invoking the lambda function 
 
 # Create Lambda permission for S3 to invoke the Lambda function
