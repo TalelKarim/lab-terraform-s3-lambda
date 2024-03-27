@@ -1,8 +1,6 @@
 provider "aws" {
 }
 
-
-
 module "s3_bucket" {
   source              = "./modules/s3-bucket"
   bucket_name         = "input-bucket-tk"
@@ -42,4 +40,10 @@ module "csv_uploader" {
   csv_filename    = "input_file.csv"
   depends_on      = [module.lambda_function]
 
+}
+
+module "api_gataway" {
+  source                     = "./modules/api-gateway"
+  lambda_function_invoke_arn = module.lambda_function.invoke_arn
+  lambda_function_name       = module.lambda_function.function_name
 }

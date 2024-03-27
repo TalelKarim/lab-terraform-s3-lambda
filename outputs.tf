@@ -1,3 +1,3 @@
-output "test_bucket_id" {
-  value = module.s3_bucket.bucket_domain_name
+output "base_invokation_url" {
+  value = module.api_gataway.base_url
 }
