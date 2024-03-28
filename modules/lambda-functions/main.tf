@@ -135,13 +135,13 @@ resource "aws_lambda_alias" "csv_processor_dev" {
   name             = "dev"
   description      = "Development version"
   function_name    = aws_lambda_function.csv_processor.function_name
-  function_version = "$LATEST" # or specify a specific version number
+  function_version = "3" # or specify a specific version number
 
-  # routing_config {
-  #   additional_version_weights = {
-  #      1 = "$LATEST"
-  #   }
-  # }
+  routing_config {
+    additional_version_weights = {
+      "1" = 0.2
+    }
+  }
 }
 
 
