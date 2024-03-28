@@ -6,8 +6,8 @@ import sys
 import json 
 
 # Initialize S3 and DynamoDB clients
-    s3 = boto3.client('s3')
-    dynamodb = boto3.client('dynamodb')
+s3 = boto3.client('s3')
+dynamodb = boto3.client('dynamodb')
 def lambda_handler(event, context):
     table =  os.environ['DYNAMODB_TABLE_NAME']  
     # Attempt to extract bucket_name and file_key from the event
