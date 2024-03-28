@@ -130,6 +130,21 @@ resource "aws_iam_role_policy" "function_logging_policy" {
   })
 }
 
+
+resource "aws_lambda_alias" "csv_processor_dev" {
+  name             = "dev"
+  description      = "Development version"
+  function_name    = aws_lambda_function.csv_processor.function_name
+  function_version = "$LATEST" # or specify a specific version number
+
+  # routing_config {
+  #   additional_version_weights = {
+  #      1 = "$LATEST"
+  #   }
+  # }
+}
+
+
 #Trigger the Lambda function when a new CSV file is uploaded to the source bucket
 resource "aws_s3_bucket_notification" "lambda_trigger" {
   bucket = var.bucket_name
@@ -140,3 +155,4 @@ resource "aws_s3_bucket_notification" "lambda_trigger" {
     filter_suffix       = ".csv"
   }
 }
+
